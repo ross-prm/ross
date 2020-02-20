@@ -5,6 +5,14 @@ export default function(containerRef) {
   return useLinking(containerRef, {
     prefixes: [Linking.makeUrl('/')],
     config: {
+      Auth: {
+        path: 'auth',
+        screen: {
+          Login: 'login',
+          Signup: 'signup',
+          ForgotPassword: 'forgot-password'
+        }
+      },
       Root: {
         path: 'root',
         screens: {

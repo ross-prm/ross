@@ -91,6 +91,7 @@ function handleHelpPress() {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 50,
     flex: 1,
     backgroundColor: '#fff',
   },

@@ -13,9 +13,9 @@ const getCurrentUserCollection = () => {
   return user ? firestore.collection("users").doc(user.uid) : null;
 };
 
-const getCurrentUserPeopleDoc = () => {
+const getCurrentUserPeopleCollection = () => {
   const user = getCurrentUser();
-  return user ? firestore.doc(`${user.uid}/people`) : null;
+  return user ? firestore.collection("users").doc(user.uid).collection('people') : null;
 };
 
-export { firebase, getCurrentUser, getCurrentUserCollection, getCurrentUserPeopleDoc };
+export { firebase, getCurrentUser, getCurrentUserCollection, getCurrentUserPeopleCollection };

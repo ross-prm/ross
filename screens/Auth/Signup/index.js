@@ -27,7 +27,8 @@ import { Loader } from "../../../components/Loader/";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
   firebase,
-  getCurrentUserCollection
+  getCurrentUserCollection,
+  getCurrentUserPeopleCollection
 } from "../../../core/config/firebase.config";
 
 export default ({ navigation }) => {
@@ -43,13 +44,18 @@ export default ({ navigation }) => {
   const [updated, setUpdated] = React.useState(false);
   const [isVisible, setIsLoaderVisible] = React.useState(false);
 
-  let userDocRef;
-
   const setUserDetailsInFirestore = async ({ email, userName }) => {
-    userDocRef = await getCurrentUserCollection();
+    const userDocRef = await getCurrentUserCollection();
     return userDocRef.set({
       email,
       userName
+    });
+  };
+
+  const createPeopleCollection = async () => {
+    const peopleCollection = await getCurrentUserPeopleCollection();
+    return await peopleCollection.add({
+      isDev: true
     });
   };
 
@@ -60,13 +66,16 @@ export default ({ navigation }) => {
     }
   }, [updated]);
 
+  React.useEffect(() => setIsLoaderVisible(loading), [loading]);
+  React.useEffect(() => (error ? setIsLoaderVisible(false) : null), [error]);
+
   const isFormCompleted = () => termsAccepted && email && password && userName;
 
   const onSignUpPress = async () => {
     setIsLoaderVisible(true);
     await firebase.auth().createUserWithEmailAndPassword(email, password);
-    await updateProfile();
-    setUpdated(true);
+    await Promise.all([updateProfile(), createPeopleCollection()]);
+    return setUpdated(true);
   };
 
   const updateProfile = async () =>

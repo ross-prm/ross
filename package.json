@@ -32,13 +32,16 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-firebase-hooks": "^2.1.1",
+    "react-hooks-lib": "^0.1.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-animated-loader": "^0.0.8",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
+    "react-native-modalbox": "^2.0.0",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-svg": "9.13.3",
+    "react-native-text-avatar": "^1.0.7",
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {

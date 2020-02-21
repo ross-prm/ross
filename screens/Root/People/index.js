@@ -1,5 +1,11 @@
 import React from "react";
-import { ScrollView, View, Dimensions, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  View,
+  Dimensions,
+  StyleSheet,
+  TextInput
+} from "react-native";
 import {
   Input,
   Layout,
@@ -8,16 +14,17 @@ import {
   TopNavigation,
   TopNavigationAction
 } from "@ui-kitten/components";
+import Textarea from "react-native-textarea";
+
 import { useList } from "react-hooks-lib";
+import { useForm, Controller } from "react-hook-form";
 import Modal from "react-native-modalbox";
 import { MessageItem } from "../extra/message-item.component";
 import { PersonAddIcon, SearchIcon } from "../extra/icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import {
-  getCurrentUserPeopleCollection
-} from "../../../core/config/firebase.config";
+import { getCurrentUserPeopleCollection } from "../../../core/config/firebase.config";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -25,11 +32,21 @@ dayjs.extend(utc);
 
 export default ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState();
+  const { control, handleSubmit, errors } = useForm();
   const [values, loading, error] = useCollectionData(
     getCurrentUserPeopleCollection()
   );
 
-  let modal = React.createRef();
+  const [valuesCount, setValuesCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (values && values.length !== valuesCount) {
+      setValuesCount(values.length);
+      modal.close();
+    }
+  }, [values]);
+
+  let modal = React.useRef(null);
 
   const onItemPress = index => {
     //navigation && navigation.navigate('Chat1');
@@ -70,11 +87,74 @@ export default ({ navigation }) => {
   );
 
   const renderAddPerson = () => {
+    const [isAddEnabled, setAddEnabled] = React.useState(false);
+    const [name, setName] = React.useState(null);
+    const [email, setEmail] = React.useState(null);
+    const [phone, setPhone] = React.useState(null);
+    const [bio, setBio] = React.useState(null);
+
+    React.useEffect(() => {
+      return setAddEnabled(!!name);
+    }, [name]);
+
     const renderCancel = () => (
       <TouchableOpacity onPress={() => modal.close()}>
         <Text>Cancel</Text>
       </TouchableOpacity>
     );
+
+    const renderAdd = () => (
+      <TouchableOpacity
+        disabled={!isAddEnabled}
+        onPress={async () => {
+          setAddEnabled(false);
+          await createNewPeople({
+            name: name,
+            phone: phone,
+            email: email,
+            bio: bio,
+            interactions: []
+          });
+        }}
+      >
+        <Text style={{ color: isAddEnabled ? "green" : "black" }}>Add</Text>
+      </TouchableOpacity>
+    );
+
+    const renderAddPersonForm = () => {
+      return (
+        <View style={styles.container}>
+          <Input
+            label="Full Name"
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+          />
+          <Input
+            label="E-mail"
+            placeholder="john@doe.com"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <Input
+            label="Phone Number"
+            placeholder="08 36 65 65 65"
+            value={phone}
+            onChangeText={setPhone}
+          />
+          <Text style={[styles.text, styles.label]}>Bio</Text>
+          <Textarea
+            containerStyle={styles.textareaContainer}
+            style={styles.textarea}
+            onChangeText={setBio}
+            defaultValue={bio}
+            maxLength={240}
+            placeholder={"Works at Microsoft, etc..."}
+            underlineColorAndroid={"transparent"}
+          />
+        </View>
+      );
+    };
 
     return (
       <Modal
@@ -87,29 +167,13 @@ export default ({ navigation }) => {
           <View style={styles.headerModal}>
             <Layout style={styles.headerModal} level="1">
               <TopNavigation
-                leftControl={[renderCancel()]}
+                leftControl={renderCancel()}
                 title="New Person"
                 alignment="center"
-                rightControls={
-                  <TopNavigationAction
-                    icon={SearchIcon}
-                    onPress={async () =>
-                      {
-                          await createNewPeople({
-                        name: "Jérémie",
-                        phone: "0836656565",
-                        email: "zz@zz.com",
-                        bio: "Mec trop cool"
-                      })
-                      return modal.close()
-                    }
-                    }
-                  >
-                    Add
-                  </TopNavigationAction>
-                }
+                rightControls={renderAdd(modal)}
               />
             </Layout>
+            {renderAddPersonForm()}
           </View>
         </ScrollView>
       </Modal>
@@ -142,11 +206,7 @@ const ListComponent = ({ data, searchQuery }) => {
   }, [searchQuery]);
 
   const renderItem = info => (
-    <MessageItem
-      style={styles.item}
-      people={info.item}
-      onPress={() => null}
-    />
+    <MessageItem style={styles.item} people={info.item} onPress={() => null} />
   );
 
   return (
@@ -174,7 +234,8 @@ const styles = StyleSheet.create({
   },
   headerModal: {
     width: Dimensions.get("screen").width,
-    padding: 5
+    paddingLeft: 5,
+    paddingRight: 10
   },
   title: {
     fontSize: 20,
@@ -184,5 +245,41 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey"
+  },
+  buttonWrapper: {
+    backgroundColor: "#2dbded",
+
+    height: 40,
+    justifyContent: "center",
+    width: 200,
+    borderRadius: 24
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textTransform: "uppercase",
+    width: "100%",
+    textAlign: "center"
+  },
+  textareaContainer: {
+    height: 180,
+    padding: 5,
+    backgroundColor: "#FFF",
+    borderColor: "black",
+    borderWidth: 1
+  },
+  textarea: {
+    textAlignVertical: "top", // hack android
+    height: 170,
+    fontSize: 14,
+    color: "#333"
+  },
+  text: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "auto"
+  },
+  label: {
+    textAlign: "left"
   }
 });

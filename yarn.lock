@@ -6220,6 +6220,11 @@ react-firebase-hooks@^2.1.1:
   resolved "https://registry.yarnpkg.com/react-firebase-hooks/-/react-firebase-hooks-2.1.1.tgz#7180b86e4bd8e33699003a41e6d33f280a54319a"
   integrity sha512-6ZvAUa5q1JJrTQxCEKCXrP6S/en3B65RAYRYHbbjUh9f1BgKPsxkdaGGBPhGKuVSLUrVqTm8PtpZ/LCtAFogKA==
 
+react-hook-form@^4.9.7:
+  version "4.9.7"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-4.9.7.tgz#3854c02b53f9846abac3f46108869edbabaa11b9"
+  integrity sha512-WMlWjZw7L1LHOiIGIYntzxirFEoCc6k1t72iOsaOgctp97NbbKbWqqX2yQhSA9xSI6AH3KOpeqRFr6+OvOL9Rw==
+
 react-hooks-lib@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/react-hooks-lib/-/react-hooks-lib-0.1.0.tgz#8b3278a4a3ebc826743992475f85fb7a4dd8e103"
@@ -6309,6 +6314,13 @@ react-native-text-avatar@^1.0.7:
   integrity sha512-4KdSb/cgYHIfmxXIwgHHzsj0+H1qnEhLvMwPngMKWKLPZiPKSUV3JpuBW6M6c4aFJ9sX0OW1zZuYtczbUpI9Og==
   dependencies:
     initials "^3.0.0"
+
+react-native-textarea@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-textarea/-/react-native-textarea-1.0.3.tgz#aaf66735afa70f2cfc039496a25fa0ae232ceb1e"
+  integrity sha512-0aZsZUgjCbXDIYZ7ESHjJWZ8fQhzrt0gNL3hJDVqv/4jC13id4Zcuex5aZzqY83JUK3uZr7gqWtFDpO4HVQWOw==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-view-shot@3.0.2:
   version "3.0.2"

@@ -17,8 +17,6 @@ import useLinking from "./navigation/useLinking";
 
 import "./core/config/firebase.config";
 
-import { Loader } from './components/Loader/';
-
 const Stack = createNativeStackNavigator();
 
 enableScreens();
@@ -28,8 +26,6 @@ export default function App(props) {
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
-
-  const [isLoaderVisible, setIsLoaderVisible] = React.useState(false);
 
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {

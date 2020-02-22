@@ -3,8 +3,7 @@ import {
   ScrollView,
   View,
   Dimensions,
-  StyleSheet,
-  TextInput
+  StyleSheet
 } from "react-native";
 import {
   Input,
@@ -17,7 +16,6 @@ import {
 import Textarea from "react-native-textarea";
 
 import { useList } from "react-hooks-lib";
-import { useForm, Controller } from "react-hook-form";
 import Modal from "react-native-modalbox";
 import { MessageItem } from "../extra/message-item.component";
 import { PersonAddIcon, SearchIcon } from "../extra/icons";
@@ -32,15 +30,18 @@ dayjs.extend(utc);
 
 export default ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState();
-  const { control, handleSubmit, errors } = useForm();
   const [values, loading, error] = useCollectionData(
-    getCurrentUserPeopleCollection()
+    getCurrentUserPeopleCollection(),
+    {
+      snapshotListenOptions: { includeMetadataChanges: true },
+    }
   );
 
   const [valuesCount, setValuesCount] = React.useState(0);
 
   React.useEffect(() => {
     if (values && values.length !== valuesCount) {
+      console.log('values', values);
       setValuesCount(values.length);
       modal.close();
     }
@@ -195,7 +196,13 @@ export default ({ navigation }) => {
 };
 
 const ListComponent = ({ data, searchQuery }) => {
-  const { list, filter, reset } = useList(data);
+  const { list, set, filter, reset } = useList(data);
+
+  React.useEffect(() => {
+    if(data) {
+      set(data);
+    }
+  }, [data]);
 
   React.useEffect(() => {
     if (searchQuery) {
@@ -233,7 +240,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8
   },
   headerModal: {
-    width: Dimensions.get("screen").width,
+    width: Dimensions.get("window").width,
     paddingLeft: 5,
     paddingRight: 10
   },

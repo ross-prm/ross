@@ -5,7 +5,6 @@ import {
   CheckBox,
   Input,
   StyleService,
-  Text,
   useStyleSheet
 } from "@ui-kitten/components";
 import { ImageOverlay } from "../extra/image-overlay.component";
@@ -14,11 +13,8 @@ import {
   EmailIcon,
   EyeIcon,
   EyeOffIcon,
-  FacebookIcon,
-  GoogleIcon,
   PersonIcon,
   PlusIcon,
-  TwitterIcon
 } from "../extra/icons";
 import { KeyboardAvoidingView } from "../extra/3rd-party";
 
@@ -105,7 +101,7 @@ export default ({ navigation }) => {
             <ProfileAvatar
               style={styles.profileAvatar}
               resizeMode="center"
-              source={require("../assets/image-person.png")}
+              source={require("../../../assets/images/icon.png")}
             />
           </View>
           <View style={styles.formContainer}>

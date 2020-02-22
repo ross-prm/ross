@@ -5,10 +5,7 @@ import { ImageOverlay } from "../extra/image-overlay.component";
 import {
   EyeIcon,
   EyeOffIcon,
-  FacebookIcon,
-  GoogleIcon,
-  PersonIcon,
-  TwitterIcon
+  PersonIcon
 } from "../extra/icons";
 import { KeyboardAvoidingView } from "../extra/3rd-party";
 
@@ -33,12 +30,6 @@ export default ({ navigation }) => {
 
   const onSignInPress = () => {
     firebase.auth().signInWithEmailAndPassword(email, password);
-    setIsLoaderVisible(true);
-  };
-
-  const onSignInWithGooglePress = async () => {
-    const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    console.log('result', result);
     setIsLoaderVisible(true);
   };
 

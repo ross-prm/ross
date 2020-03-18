@@ -2,14 +2,11 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Input, Text } from "@ui-kitten/components";
 import { ImageOverlay } from "../extra/image-overlay.component";
-import {
-  EyeIcon,
-  EyeOffIcon,
-  PersonIcon
-} from "../extra/icons";
+import { EyeIcon, EyeOffIcon, PersonIcon } from "../extra/icons";
 import { KeyboardAvoidingView } from "../extra/3rd-party";
 
 import { Loader } from "../../../components/Loader/";
+import { showToast } from "../extra/toast.component";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { firebase } from "../../../core/config/firebase.config";
@@ -28,9 +25,22 @@ export default ({ navigation }) => {
     }
   }, [user]);
 
+  React.useEffect(() => {
+    if (error) {
+      setIsLoaderVisible(false);
+    }
+  }, [error]);
+
   const onSignInPress = () => {
-    firebase.auth().signInWithEmailAndPassword(email, password);
-    setIsLoaderVisible(true);
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => setIsLoaderVisible(true))
+      .catch(err => {
+        const { message } = err;
+        showToast({ message: message, isError: true });
+        setIsLoaderVisible(false);
+      });
   };
 
   const onSignUpButtonPress = () => {
@@ -101,7 +111,7 @@ export default ({ navigation }) => {
           >
             SIGN IN
           </Button>
-          
+
           <Button
             style={styles.signUpButton}
             appearance="ghost"

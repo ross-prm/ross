@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  ScrollView,
-  View,
-  Dimensions,
-  StyleSheet
-} from "react-native";
+import { ScrollView, View, Dimensions, StyleSheet } from "react-native";
 import {
   Input,
   Layout,
@@ -13,12 +8,12 @@ import {
   TopNavigation,
   TopNavigationAction
 } from "@ui-kitten/components";
-import Textarea from "react-native-textarea";
 
 import { useList } from "react-hooks-lib";
 import Modal from "react-native-modalbox";
 import { MessageItem } from "../extra/message-item.component";
 import { PersonAddIcon, SearchIcon } from "../extra/icons";
+import { Chatbot } from '../extra/chatbot.component';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -33,7 +28,7 @@ export default ({ navigation }) => {
   const [values, loading, error] = useCollectionData(
     getCurrentUserPeopleCollection(),
     {
-      snapshotListenOptions: { includeMetadataChanges: true },
+      snapshotListenOptions: { includeMetadataChanges: true }
     }
   );
 
@@ -41,7 +36,7 @@ export default ({ navigation }) => {
 
   React.useEffect(() => {
     if (values && values.length !== valuesCount) {
-      console.log('values', values);
+      console.log("values", values);
       setValuesCount(values.length);
       modal.close();
     }
@@ -123,37 +118,108 @@ export default ({ navigation }) => {
     );
 
     const renderAddPersonForm = () => {
+      const steps = [
+        {
+          id: "0",
+          message: "Welcome to react chatbot!",
+          trigger: "1"
+        },
+        {
+          id: "1",
+          message: "What is your name?",
+          trigger: "name"
+        },
+        {
+          id: "name",
+          user: true,
+          trigger: "3"
+        },
+        {
+          id: "3",
+          message: "Hi {previousValue}! What is your gender?",
+          trigger: "gender"
+        },
+        {
+          id: "gender",
+          options: [
+            { value: "male", label: "Male", trigger: "5" },
+            { value: "female", label: "Female", trigger: "5" }
+          ]
+        },
+        {
+          id: "5",
+          message: "How old are you?",
+          trigger: "age"
+        },
+        {
+          id: "age",
+          user: true,
+          trigger: "7",
+          validator: value => {
+            if (isNaN(value)) {
+              return "value must be a number";
+            } else if (value < 0) {
+              return "value must be positive";
+            } else if (value > 120) {
+              return `${value}? Come on!`;
+            }
+
+            return true;
+          }
+        },
+        {
+          id: "7",
+          message: "Great! Check out your summary",
+          trigger: "update"
+        },
+        {
+          id: "update",
+          message: "Would you like to update some field?",
+          trigger: "update-question"
+        },
+        {
+          id: "update-question",
+          options: [
+            { value: "yes", label: "Yes", trigger: "update-yes" },
+            { value: "no", label: "No", trigger: "end-message" }
+          ]
+        },
+        {
+          id: "update-yes",
+          message: "What field would you like to update?",
+          trigger: "update-fields"
+        },
+        {
+          id: "update-fields",
+          options: [
+            { value: "name", label: "Name", trigger: "update-name" },
+            { value: "gender", label: "Gender", trigger: "update-gender" },
+            { value: "age", label: "Age", trigger: "update-age" }
+          ]
+        },
+        {
+          id: "update-name",
+          update: "name",
+          trigger: "7"
+        },
+        {
+          id: "update-gender",
+          update: "gender",
+          trigger: "7"
+        },
+        {
+          id: "update-age",
+          update: "age",
+          trigger: "7"
+        },
+        {
+          id: "end-message",
+          message: "Thanks! Your data was submitted successfully!",
+          end: true
+        }
+      ];
       return (
-        <View style={styles.container}>
-          <Input
-            label="Full Name"
-            placeholder="John Doe"
-            value={name}
-            onChangeText={setName}
-          />
-          <Input
-            label="E-mail"
-            placeholder="john@doe.com"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <Input
-            label="Phone Number"
-            placeholder="08 36 65 65 65"
-            value={phone}
-            onChangeText={setPhone}
-          />
-          <Text style={[styles.text, styles.label]}>Bio</Text>
-          <Textarea
-            containerStyle={styles.textareaContainer}
-            style={styles.textarea}
-            onChangeText={setBio}
-            defaultValue={bio}
-            maxLength={240}
-            placeholder={"Works at Microsoft, etc..."}
-            underlineColorAndroid={"transparent"}
-          />
-        </View>
+        <Chatbot steps={steps} />
       );
     };
 
@@ -171,7 +237,7 @@ export default ({ navigation }) => {
                 leftControl={renderCancel()}
                 title="New Person"
                 alignment="center"
-                rightControls={renderAdd(modal)}
+                //rightControls={renderAdd(modal)}
               />
             </Layout>
             {renderAddPersonForm()}
@@ -199,7 +265,7 @@ const ListComponent = ({ data, searchQuery }) => {
   const { list, set, filter, reset } = useList(data);
 
   React.useEffect(() => {
-    if(data) {
+    if (data) {
       set(data);
     }
   }, [data]);
@@ -240,7 +306,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8
   },
   headerModal: {
-    width: Dimensions.get("window").width,
+    width: Dimensions.get("screen").width,
     paddingLeft: 5,
     paddingRight: 10
   },

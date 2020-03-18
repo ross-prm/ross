@@ -1,11 +1,12 @@
 import * as React from "react";
+import IntroScreen from '../screens/Intro';
 import LoginScreen from "../screens/Auth/Login";
 import SignupScreen from "../screens/Auth/Signup";
 import ForgotPasswordScreen from "../screens/Auth/ForgotPassword";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const Stack = createNativeStackNavigator();
-const INITIAL_ROUTE_NAME = "Login";
+const INITIAL_ROUTE_NAME = "Intro";
 
 export default function StackNavigator({ navigation }) {
   return (
@@ -15,6 +16,11 @@ export default function StackNavigator({ navigation }) {
         headerShown: false
       }}
     >
+      <Stack.Screen
+        name="Intro"
+        component={IntroScreen}
+        stackAnimation={"fade"}
+      />
       <Stack.Screen
         name="Login"
         component={LoginScreen}

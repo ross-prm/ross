@@ -4,6 +4,7 @@ import {
   Button,
   CheckBox,
   Input,
+  Text,
   StyleService,
   useStyleSheet
 } from "@ui-kitten/components";
@@ -14,7 +15,7 @@ import {
   EyeIcon,
   EyeOffIcon,
   PersonIcon,
-  PlusIcon,
+  PlusIcon
 } from "../extra/icons";
 import { KeyboardAvoidingView } from "../extra/3rd-party";
 
@@ -63,7 +64,9 @@ export default ({ navigation }) => {
   }, [updated]);
 
   React.useEffect(() => setIsLoaderVisible(loading), [loading]);
-  React.useEffect(() => (error ? setIsLoaderVisible(false) : null), [error]);
+  React.useEffect(() => (error ? setIsLoaderVisible(false) : () => null), [
+    error
+  ]);
 
   const isFormCompleted = () => termsAccepted && email && password && userName;
 
@@ -101,8 +104,9 @@ export default ({ navigation }) => {
             <ProfileAvatar
               style={styles.profileAvatar}
               resizeMode="center"
-              source={require("../../../assets/images/icon.png")}
+              source={require("../assets/ross.png")}
             />
+            <Text style={[styles.termsCheckBoxText, styles.title]}>Let's start by creating an account</Text>
           </View>
           <View style={styles.formContainer}>
             <Input
@@ -168,8 +172,8 @@ const themedStyles = StyleService.create({
     flex: 1
   },
   headerContainer: {
-    marginTop: 5,
-    justifyContent: "center",
+    marginTop: 25,
+    justifyContent: "space-around",
     alignItems: "center",
     minHeight: 176
   },
@@ -178,8 +182,8 @@ const themedStyles = StyleService.create({
     height: 92,
     borderRadius: 46,
     alignSelf: "center",
-    backgroundColor: "background-basic-color-1",
-    tintColor: "text-hint-color"
+    backgroundColor: "background-basic-color-1"
+    //tintColor: "text-hint-color"
   },
   editAvatarButton: {
     width: 32,
@@ -216,6 +220,13 @@ const themedStyles = StyleService.create({
   },
   socialAuthHintText: {
     alignSelf: "center",
+    marginBottom: 16
+  },
+  title: {
+    fontSize: 22,
+    color: "white",
+    backgroundColor: "transparent",
+    textAlign: "center",
     marginBottom: 16
   }
 });

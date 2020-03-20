@@ -14,28 +14,28 @@ const slides = [
     title: "Welcome to Ross",
     text: "Your personal relationship manager",
     svg: require("./assets/welcome.svg"),
-    colors: ["#FFFFFF", "#FFFFFF"]
+    colors: ["#FFFFFF", "#E6E6FF"]
   },
   {
     key: "slide-2",
     title: "Keep track of the people that matter",
     text: "From coworkers to dates, along with friends and family",
     svg: require("./assets/track.svg"),
-    colors: ["#A3A1FF", "#3A3897"]
+    colors: ["#E6E6FF", "#FFFFFF"]
   },
   {
     key: "slide-3",
     title: "Write down your interactions",
     text: "And remember what you talked about last time",
     svg: require("./assets/notes.svg"),
-    colors: ["#A3A1FF", "#3A3897"]
+    colors: ["#FFFFFF", "#CCCCFF"]
   },
   {
     key: "end",
     title: "Be a better friend",
     text: "Be reminded of calling your loved ones.",
     svg: require('./assets/friends.svg'),
-    colors: ["#29ABE2", "#4F00BC"]
+    colors: ["#CCCCFF", "#FFFFFF"]
   }
 ];
 

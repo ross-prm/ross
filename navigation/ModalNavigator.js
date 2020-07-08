@@ -6,7 +6,7 @@ import {
 } from "@ui-kitten/components";
 import {createStackNavigator} from '@react-navigation/stack';
 
-import { createNewPeople, steps} from '../screens/Root/Form/addPeople';
+import { createNewPeople, steps, handleEnd } from '../screens/Root/Form/addPeople';
 import addInteractionConvo from '../screens/Root/Form/addInteraction';
 
 const Stack = createStackNavigator();
@@ -16,10 +16,10 @@ export default function StackNavigator({ navigation }) {
     <Stack.Navigator>
       <Stack.Screen
         name="NewPeople"
-        component={() => <Chatbot steps={steps} handleEnd={createNewPeople} navigation={navigation} />}
+        component={() => <Chatbot steps={steps} navigation={navigation} handleEnd={handleEnd} />}
         stackAnimation={"fade"}
         options={{
-            headerTitle: () => <Text>New People</Text>,
+            headerTitle: null,
             headerLeft: () => (
                 <Button
                     appearance="ghost"
@@ -29,6 +29,9 @@ export default function StackNavigator({ navigation }) {
                     Cancel
                 </Button>
             ),
+            headerStyle: {
+              borderWidth: 0
+            }
           }}
       />
 

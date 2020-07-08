@@ -19,6 +19,7 @@ import useLinking from "./navigation/useLinking";
 import "./core/config/firebase.config";
 
 const Stack = createNativeStackNavigator();
+console.disableYellowBox = true;
 
 enableScreens();
 

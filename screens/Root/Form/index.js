@@ -2,23 +2,29 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Chatbot } from "../extra/chatbot.component";
 
-export default ({ steps, onFinish = () => null, ...rest }) => {
+export default ({ steps, handleEnd = () => null, ...rest }) => {
   const { navigation } = rest;
-  
-  const handleEnd = async ({ steps, values }) => {
-    await onFinish(values);
-    return setTimeout(() => navigation.goBack(), 1500);
-  };
 
   return (
     <View style={styles.container}>
-      <Chatbot steps={steps} handleEnd={handleEnd} />
+      <Chatbot
+        steps={steps}
+        handleEnd={async ({ steps }) => {
+          await handleEnd({ steps });
+          return navigation.goBack();
+        }}
+        customStyle={styles.custom}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
+  custom: {
+    borderWidth: 0,
+    backgroundColor: "red",
+  },
 });

@@ -18,4 +18,23 @@ const getCurrentUserPeopleCollection = () => {
   return user ? firestore.collection("users").doc(user.uid).collection('people') : null;
 };
 
-export { firebase, getCurrentUser, getCurrentUserCollection, getCurrentUserPeopleCollection };
+const getCurrentUserTagsCollection = () => {
+  const user = getCurrentUser();
+  return user ? firestore.collection("users").doc(user.uid).collection('tags') : null;
+};
+
+const getCurrentUserInteractionsCollection = async (person) => {
+  const user = getCurrentUser();
+  const query = user ? await firestore.collection("users").doc(user.uid).collection('people').where('name', '==', person).get() : null;
+  if(query) {
+    console.log('docs', query.docs);
+    const snapshot = query.docs[0];
+    return snapshot.ref;
+  }
+  else {
+    console.log('null');
+  }
+  return null;
+};
+
+export { firebase, getCurrentUser, getCurrentUserCollection, getCurrentUserPeopleCollection, getCurrentUserTagsCollection, getCurrentUserInteractionsCollection };

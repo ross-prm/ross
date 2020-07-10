@@ -6,7 +6,7 @@ import {
   List,
   Text,
   TopNavigation,
-  TopNavigationAction
+  TopNavigationAction,
 } from "@ui-kitten/components";
 
 import { useList } from "react-hooks-lib";
@@ -16,16 +16,12 @@ import { PersonAddIcon, SearchIcon } from "../extra/icons";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { getCurrentUserPeopleCollection } from "../../../core/config/firebase.config";
 
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-dayjs.extend(utc);
-
 export default ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState();
   const [values, loading, error] = useCollectionData(
     getCurrentUserPeopleCollection(),
     {
-      snapshotListenOptions: { includeMetadataChanges: true }
+      snapshotListenOptions: { includeMetadataChanges: true },
     }
   );
 
@@ -39,10 +35,6 @@ export default ({ navigation }) => {
   }, [values]);
 
   let modal = React.useRef(null);
-
-  const onItemPress = index => {
-    //navigation && navigation.navigate('Chat1');
-  };
 
   const renderMenuAction = () => (
     <TopNavigationAction icon={PersonAddIcon} onPress={() => addPerson()} />
@@ -63,22 +55,26 @@ export default ({ navigation }) => {
     </Layout>
   );
 
-  const addPerson = () => navigation.navigate({ name: 'Add', screenName: 'NewPeople' });
+  const addPerson = () =>
+    navigation && navigation.navigate("Add", {
+      screen: 'NewPeople',
+    });
 
   return (
     <View style={styles.container}>
       {renderHeader()}
       {values && (
         <ListComponent
-          data={values.filter(item => !item.isDev)}
+          data={values.filter((item) => !item.isDev)}
           searchQuery={searchQuery}
+          navigation={navigation}
         />
       )}
     </View>
   );
 };
 
-const ListComponent = ({ data, searchQuery }) => {
+const ListComponent = ({ navigation, data, searchQuery }) => {
   const { list, set, filter, reset } = useList(data);
 
   React.useEffect(() => {
@@ -89,15 +85,26 @@ const ListComponent = ({ data, searchQuery }) => {
 
   React.useEffect(() => {
     if (searchQuery) {
-      filter(people => people.name.indexOf(searchQuery) > -1);
+      filter((people) => people.name.indexOf(searchQuery) > -1);
     } else {
       reset();
     }
   }, [searchQuery]);
 
-  const renderItem = info => (
-    <MessageItem style={styles.item} people={info.item} onPress={() => null} />
+  const renderItem = (info) => (
+    <MessageItem
+      style={styles.item}
+      people={info.item}
+      onPress={() => addInteraction(info.item)}
+    />
   );
+
+  const addInteraction = (item) => {
+    navigation && navigation.navigate("Add", {
+      screen: 'NewInteraction',
+      params: { user: item }
+    });
+  };
 
   return (
     <List
@@ -112,30 +119,30 @@ const ListComponent = ({ data, searchQuery }) => {
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
-    flex: 1
+    flex: 1,
   },
   list: {
-    flex: 1
+    flex: 1,
   },
   header: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   headerModal: {
     flex: 1,
-    height: '100%',
+    height: "100%",
     paddingLeft: 5,
-    paddingRight: 10
+    paddingRight: 10,
   },
   title: {
     fontSize: 20,
-    lineHeight: 19
+    lineHeight: 19,
   },
   item: {
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "lightgrey"
+    borderBottomColor: "lightgrey",
   },
   buttonWrapper: {
     backgroundColor: "#2dbded",
@@ -143,34 +150,34 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     width: 200,
-    borderRadius: 24
+    borderRadius: 24,
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
     textTransform: "uppercase",
     width: "100%",
-    textAlign: "center"
+    textAlign: "center",
   },
   textareaContainer: {
     height: 180,
     padding: 5,
     backgroundColor: "#FFF",
     borderColor: "black",
-    borderWidth: 1
+    borderWidth: 1,
   },
   textarea: {
     textAlignVertical: "top", // hack android
     height: 170,
     fontSize: 14,
-    color: "#333"
+    color: "#333",
   },
   text: {
     flexGrow: 1,
     flexShrink: 1,
-    flexBasis: "auto"
+    flexBasis: "auto",
   },
   label: {
-    textAlign: "left"
-  }
+    textAlign: "left",
+  },
 });

@@ -5,6 +5,7 @@ dayjs.extend(utc);
 
 import { getCurrentUserPeopleCollection } from "../../../core/config/firebase.config";
 import { PersonBubble } from "./PersonBubble.component";
+import { TagPicker } from './tagPicker.component';
 
 export async function handleEnd({ steps }) {
   console.log(steps);
@@ -26,7 +27,7 @@ export const steps = [
     message:
       "Hey, I'm Ross. I'm here to help you keep in touch with your acquaintances.",
     //trigger: "import_choice"
-    trigger: "1",
+    trigger: "8",
   },
   /*{
       id: "import_choice",
@@ -73,13 +74,12 @@ export const steps = [
   },
   {
     id: "7",
-    message: "Great! Check out your summary",
-    trigger: "update",
+    message: "Great! You also have to possibility to add tags so that it will be easier to filter later.",
+    trigger: "8",
   },
   {
-    id: "update",
-    message: "Would you like to update some field?",
-    trigger: "update-question",
+    id: "8",
+    component: <TagPicker />
   },
   {
     id: "update-question",

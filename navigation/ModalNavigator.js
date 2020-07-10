@@ -6,8 +6,8 @@ import {
 } from "@ui-kitten/components";
 import {createStackNavigator} from '@react-navigation/stack';
 
-import { createNewPeople, steps, handleEnd } from '../screens/Root/Form/addPeople';
-import addInteractionConvo from '../screens/Root/Form/addInteraction';
+import * as addPeople from '../screens/Root/Form/addPeople';
+import * as addInteraction from '../screens/Root/Form/addInteraction';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,7 @@ export default function StackNavigator({ navigation }) {
     <Stack.Navigator>
       <Stack.Screen
         name="NewPeople"
-        component={() => <Chatbot steps={steps} navigation={navigation} handleEnd={handleEnd} />}
+        component={() => <Chatbot steps={addPeople.steps} navigation={navigation} handleEnd={addPeople.handleEnd} />}
         stackAnimation={"fade"}
         options={{
             headerTitle: null,
@@ -37,10 +37,10 @@ export default function StackNavigator({ navigation }) {
 
     <Stack.Screen
         name="NewInteraction"
-        component={() => <Chatbot steps={addInteractionConvo} />}
+        component={({route:{params:{user}}}) => <Chatbot steps={addInteraction.steps(user.name)} navigation={navigation} handleEnd={addInteraction.handleEnd} />}
         stackAnimation={"fade"}
         options={{
-            headerTitle: () => <Text>New Interaction</Text>,
+            headerTitle: null,
             headerLeft: () => (
                 <Button
                     appearance="ghost"
@@ -50,6 +50,9 @@ export default function StackNavigator({ navigation }) {
                     Cancel
                 </Button>
             ),
+            headerStyle: {
+              borderWidth: 0
+            }
           }}
       />
     </Stack.Navigator>

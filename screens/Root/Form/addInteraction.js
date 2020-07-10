@@ -1,100 +1,71 @@
-export default [
-    {
-      id: "0",
-      message: "Welcome to react chatbot!",
-      trigger: "1"
-    },
-    {
-      id: "1",
-      message: "What is your name?",
-      trigger: "name"
-    },
-    {
-      id: "name",
-      user: true,
-      trigger: "3"
-    },
-    {
-      id: "3",
-      message: "Hi {previousValue}! What is your gender?",
-      trigger: "gender"
-    },
-    {
-      id: "gender",
-      options: [
-        { value: "male", label: "Male", trigger: "5" },
-        { value: "female", label: "Female", trigger: "5" }
-      ]
-    },
-    {
-      id: "5",
-      message: "How old are you?",
-      trigger: "age"
-    },
-    {
-      id: "age",
-      user: true,
-      trigger: "7",
-      validator: value => {
-        if (isNaN(value)) {
-          return "value must be a number";
-        } else if (value < 0) {
-          return "value must be positive";
-        } else if (value > 120) {
-          return `${value}? Come on!`;
-        }
+import React, { useEffect } from "react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+dayjs.extend(utc);
+
+import { firebase, getCurrentUserInteractionsCollection } from "../../../core/config/firebase.config";
+
+export async function handleEnd({ steps }) {
+  console.log(steps);
+  const { name, mean, about } = steps;
+  const peopleDoc = await getCurrentUserInteractionsCollection(name.value);
+  console.log(peopleDoc);
+  return await peopleDoc.update({
+    interactions: firebase.firestore.FieldValue.arrayUnion({
+      mean: mean.value,
+      about: about.value,
+      dateAdded: dayjs.utc().local().format(),
+    }),
+  });
+}
+
+const NameSetter = ({ triggerNextStep, value }) => {
+  let data = { value: value, trigger: 'end-message' };
+
+  useEffect(() => {
+    triggerNextStep(data);
+  }, []);
+
+  return null;
+};
+
+export const steps = (people) => [
+  {
+    id: "0",
+    message: `I'm glad to hear you're keeping in touch!`,
+    trigger: "1",
+  },
+  {
+    id: "1",
+    message: `How did you get in touch with ${people} ?`,
+    trigger: "mean",
+  },
+  {
+    id: "mean",
+    options: [
+      { value: "in_person", label: "In person", trigger: "3" },
+      { value: "email", label: "By email", trigger: "3" },
+      { value: "phonecall", label: "By phone", trigger: "3" },
+    ],
+  },
+  {
+    id: "3",
+    message: "Great! And what did you discuss ?",
+    trigger: "about",
+  },
+  {
+    id: "about",
+    user: true,
+    trigger: "name",
+  },
+  {
+    id: "name",
+    component: <NameSetter value={people} />,
+  },
+  {
+    id: "end-message",
+    message: "Noted!",
+    end: true,
+  },
   
-        return true;
-      }
-    },
-    {
-      id: "7",
-      message: "Great! Check out your summary",
-      trigger: "update"
-    },
-    {
-      id: "update",
-      message: "Would you like to update some field?",
-      trigger: "update-question"
-    },
-    {
-      id: "update-question",
-      options: [
-        { value: "yes", label: "Yes", trigger: "update-yes" },
-        { value: "no", label: "No", trigger: "end-message" }
-      ]
-    },
-    {
-      id: "update-yes",
-      message: "What field would you like to update?",
-      trigger: "update-fields"
-    },
-    {
-      id: "update-fields",
-      options: [
-        { value: "name", label: "Name", trigger: "update-name" },
-        { value: "gender", label: "Gender", trigger: "update-gender" },
-        { value: "age", label: "Age", trigger: "update-age" }
-      ]
-    },
-    {
-      id: "update-name",
-      update: "name",
-      trigger: "7"
-    },
-    {
-      id: "update-gender",
-      update: "gender",
-      trigger: "7"
-    },
-    {
-      id: "update-age",
-      update: "age",
-      trigger: "7"
-    },
-    {
-      id: "end-message",
-      message: "Thanks! Your data was submitted successfully!",
-      end: true
-    }
-  ];
+];

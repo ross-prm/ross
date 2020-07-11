@@ -11,7 +11,7 @@ export default ({ steps, handleEnd = () => null, ...rest }) => {
         steps={steps}
         handleEnd={async ({ steps }) => {
           await handleEnd({ steps });
-          return navigation.goBack();
+          return navigation && navigation.navigate("Root");
         }}
         customStyle={styles.custom}
       />

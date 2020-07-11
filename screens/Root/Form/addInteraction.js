@@ -3,24 +3,61 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
-import { firebase, getCurrentUserInteractionsCollection } from "../../../core/config/firebase.config";
+import {
+  firebase,
+  getCurrentUserInteractionsCollection,
+} from "../../../core/config/firebase.config";
+
+const checkIfInteractionAtDate = (interactions, date) =>
+  interactions.findIndex((interaction) =>
+    interaction.date && dayjs(interaction.date).isSame(date, "day")
+  );
 
 export async function handleEnd({ steps }) {
   console.log(steps);
   const { name, mean, about } = steps;
-  const peopleDoc = await getCurrentUserInteractionsCollection(name.value);
-  console.log(peopleDoc);
-  return await peopleDoc.update({
-    interactions: firebase.firestore.FieldValue.arrayUnion({
-      mean: mean.value,
-      about: about.value,
-      dateAdded: dayjs.utc().local().format(),
-    }),
-  });
+  const now = dayjs.utc().local().valueOf();
+  const { ref, records } = await getCurrentUserInteractionsCollection(name.value);
+  console.log('records', records);
+  const isSameDayInteractionIndex = checkIfInteractionAtDate(
+    records.interactions,
+    now
+  );
+  if (isSameDayInteractionIndex > -1) {
+    let sameDayInteraction = records.interactions[isSameDayInteractionIndex];
+    sameDayInteraction.data = [
+      {
+        title: mean.value,
+        subtitle: about.value,
+        date: now,
+      },
+      ...sameDayInteraction.data,
+    ];
+    return await ref.update({
+      interactions: [
+        ...records.interactions.slice(0, isSameDayInteractionIndex),
+        sameDayInteraction,
+        ...records.interactions.slice(isSameDayInteractionIndex + 1),
+      ],
+    });
+  } else {
+    return await ref.update({
+      interactions: firebase.firestore.FieldValue.arrayUnion({
+        date: now,
+        data: [
+          {
+            title: mean.value,
+            subtitle: about.value,
+            date: now,
+          },
+        ],
+      }),
+    });
+  }
 }
 
 const NameSetter = ({ triggerNextStep, value }) => {
-  let data = { value: value, trigger: 'end-message' };
+  let data = { value: value, trigger: "end-message" };
 
   useEffect(() => {
     triggerNextStep(data);
@@ -67,5 +104,4 @@ export const steps = (people) => [
     message: "Noted!",
     end: true,
   },
-  
 ];

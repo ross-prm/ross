@@ -14,6 +14,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./navigation/BottomTabNavigator";
 import StackNavigator from "./navigation/StackNavigator";
 import ModalNavigator from './navigation/ModalNavigator';
+import PeopleNavigator from './navigation/PeopleNavigator';
 import useLinking from "./navigation/useLinking";
 
 import "./core/config/firebase.config";
@@ -74,6 +75,7 @@ export default function App(props) {
               >
                 <Stack.Screen name="Auth" component={StackNavigator} />
                 <Stack.Screen name="Root" component={BottomTabNavigator} />
+                <Stack.Screen name="People" component={PeopleNavigator} />
                 <Stack.Screen name="Add" component={ModalNavigator} />
               </Stack.Navigator>
             </NavigationContainer>

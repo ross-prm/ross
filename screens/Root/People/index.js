@@ -100,8 +100,8 @@ const ListComponent = ({ navigation, data, searchQuery }) => {
   );
 
   const addInteraction = (item) => {
-    navigation && navigation.navigate("Add", {
-      screen: 'NewInteraction',
+    navigation && navigation.navigate("People", {
+      screen: 'PeopleDetails',
       params: { user: item }
     });
   };

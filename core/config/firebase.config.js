@@ -29,7 +29,8 @@ const getCurrentUserInteractionsCollection = async (person) => {
   if(query) {
     console.log('docs', query.docs);
     const snapshot = query.docs[0];
-    return snapshot.ref;
+    const data = snapshot.data();
+    return { ref: snapshot.ref, records: data } ;
   }
   else {
     console.log('null');

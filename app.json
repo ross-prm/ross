@@ -9,6 +9,18 @@
       "android",
       "web"
     ],
+    "ios": {
+      "bundleIdentifier": "com.zarcainc.ross",
+      "appStoreUrl": "https://itunes.apple.com/us/app/kitten-tricks/id1246143230"
+    },
+    "android": {
+      "package": "com.zarcainc.ross",
+      "versionCode": 1,
+      "playStoreUrl": "https://play.google.com/store/apps/details?id=com.akveo.kittenTricks"
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#FFFFFF"
+    },
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -24,9 +36,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "description": ""
   }
 }

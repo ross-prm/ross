@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { Input } from "@ui-kitten/components";
 
 import { Bubble } from './Bubble.component';
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "white",
     borderWidth: 0,
+    borderRadius: 0,
     borderColor: "white",
     borderBottomColor: 'black',
 

@@ -8,6 +8,8 @@ import {
   getCurrentUserInteractionsCollection,
 } from "../../../core/config/firebase.config";
 
+import { Picker } from './Datepicker.component';
+
 const checkIfInteractionAtDate = (interactions, date) =>
   interactions.findIndex((interaction) =>
     interaction.date && dayjs(interaction.date).isSame(date, "day")
@@ -102,6 +104,30 @@ export const steps = (people) => [
   {
     id: "end-message",
     message: "Noted!",
-    end: true,
+    trigger: 'ask-reminder'
   },
+  {
+    id: "ask-reminder",
+    message: "Would you like to be reminded to follow up on this ?",
+    trigger: "ask-reminder-choice"
+  },
+  {
+    id: 'ask-reminder-choice',
+    options: [
+      { value: "yes", label: 'Yes', trigger: 'ask-reminder-date' },
+      { value: "no", label: 'No', trigger: 'end-message' },
+    ],
+  },
+  {
+    id: "ask-reminder-date",
+    message: "When would you like to be reminded ?",
+    trigger: "set-reminder-date"
+  },
+  {
+    id: "set-reminder-date",
+    component: <Picker />,
+    waitAction: true,
+    end: true
+  }
+
 ];

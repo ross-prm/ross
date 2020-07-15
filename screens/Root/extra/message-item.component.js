@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Avatar, ListItem, Text } from "@ui-kitten/components";
 import TextAvatar from "react-native-text-avatar";
-import { DoneAllIcon } from "./icons";
 
 export const MessageItem = props => {
   const { people, ...listItemProps } = props;

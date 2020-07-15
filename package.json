@@ -31,6 +31,7 @@
     "expo-svg-uri": "^1.1.0",
     "expo-web-browser": "~8.0.0",
     "firebase": "^7.8.2",
+    "human-date": "^1.4.0",
     "lottie-react-native": "~2.6.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -41,9 +42,10 @@
     "react-native-androw": "^0.0.34",
     "react-native-animated-loader": "^0.0.8",
     "react-native-app-intro-slider": "^3.0.0",
-    "react-native-beautiful-timeline": "^0.0.7",
+    "react-native-beautiful-timeline": "https://github.com/jzarca01/react-native-beautiful-timeline.git",
     "react-native-chatbot-expo": "https://github.com/jzarca01/react-native-chatbot-expo.git",
     "react-native-dash": "^0.0.11",
+    "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-gifted-chat": "^0.13.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",
@@ -62,5 +64,5 @@
     "babel-preset-expo": "~8.0.0",
     "jest-expo": "~36.0.1"
   },
-  "private": true
+  "private": false
 }

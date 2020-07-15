@@ -27,7 +27,7 @@ export const steps = [
     message:
       "Hey, I'm Ross. I'm here to help you keep in touch with your acquaintances.",
     //trigger: "import_choice"
-    trigger: "8",
+    trigger: "1",
   },
   /*{
       id: "import_choice",

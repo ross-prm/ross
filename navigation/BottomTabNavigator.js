@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import PeopleScreen from '../screens/Root/People/';
+import RemindersScreen from '../screens/Root/Reminders/';
 import LinksScreen from '../screens/LinksScreen';
 
 const BottomTab = createBottomTabNavigator();
@@ -22,7 +23,7 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name="Links"
-        component={LinksScreen}
+        component={RemindersScreen}
         options={{
           title: 'Reminders',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-clock" />,

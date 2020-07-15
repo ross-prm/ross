@@ -17,7 +17,6 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { getCurrentUserPeopleCollection } from "../../../core/config/firebase.config";
 
 export default ({ navigation }) => {
-  const [searchQuery, setSearchQuery] = React.useState();
   const [values, loading, error] = useCollectionData(
     getCurrentUserPeopleCollection(),
     {
@@ -34,8 +33,6 @@ export default ({ navigation }) => {
     }
   }, [values]);
 
-  let modal = React.useRef(null);
-
   const renderMenuAction = () => (
     <TopNavigationAction icon={PersonAddIcon} onPress={() => addPerson()} />
   );
@@ -43,21 +40,15 @@ export default ({ navigation }) => {
   const renderHeader = () => (
     <Layout style={styles.header} level="1">
       <TopNavigation
-        leftControl={<Text style={styles.title}>People</Text>}
+        leftControl={<Text style={styles.title}>Reminders</Text>}
         rightControls={renderMenuAction()}
-      />
-      <Input
-        placeholder="Search"
-        value={searchQuery}
-        icon={SearchIcon}
-        onChangeText={setSearchQuery}
       />
     </Layout>
   );
 
   const addPerson = () =>
     navigation && navigation.navigate("Add", {
-      screen: 'NewPeople',
+      screen: 'NewReminder',
     });
 
   return (
@@ -66,7 +57,6 @@ export default ({ navigation }) => {
       {values && (
         <ListComponent
           data={values.filter((item) => !item.isDev)}
-          searchQuery={searchQuery}
           navigation={navigation}
         />
       )}
@@ -82,14 +72,6 @@ const ListComponent = ({ navigation, data, searchQuery }) => {
       set(data);
     }
   }, [data]);
-
-  React.useEffect(() => {
-    if (searchQuery) {
-      filter((people) => people.name.indexOf(searchQuery) > -1);
-    } else {
-      reset();
-    }
-  }, [searchQuery]);
 
   const renderItem = (info) => (
     <MessageItem
@@ -111,7 +93,6 @@ const ListComponent = ({ navigation, data, searchQuery }) => {
       style={styles.list}
       data={list}
       renderItem={renderItem}
-      searchQuery={searchQuery}
     />
   );
 };
